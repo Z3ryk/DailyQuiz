@@ -13,7 +13,7 @@ struct DailyQuizApp: App {
 
     var body: some Scene {
         WindowGroup {
-            StartQuizView()
+            StartQuizView(viewModel: StartQuizViewModel())
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

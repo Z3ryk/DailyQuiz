@@ -22,6 +22,9 @@ struct StartQuizView: View {
         animation: .default)
     private var items: FetchedResults<Item>
 
+    @ObservedObject
+    private var viewModel: StartQuizViewModel
+
     var body: some View {
         VStack {
             HistoryButtonView { }
@@ -38,6 +41,10 @@ struct StartQuizView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.purpleMain)
+    }
+
+    init(viewModel: StartQuizViewModel) {
+        self.viewModel = viewModel
     }
 
     private func addItem() {
@@ -80,5 +87,5 @@ private let itemFormatter: DateFormatter = {
 }()
 
 #Preview {
-    StartQuizView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    StartQuizView(viewModel: StartQuizViewModel()).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
