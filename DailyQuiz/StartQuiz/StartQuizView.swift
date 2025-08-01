@@ -9,6 +9,12 @@ import SwiftUI
 import CoreData
 
 struct StartQuizView: View {
+    enum State {
+        case initial
+        case loading
+        case error
+    }
+    
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
