@@ -33,11 +33,28 @@ struct StartQuizView: View {
             Image(.logo)
                 .padding(.top, 114)
 
-            QuizLaunchView {
-                viewModel.loadQuizInfo()
+            switch viewModel.state {
+            case .initial, .error:
+                QuizLaunchView {
+                    viewModel.loadQuizInfo()
+                }
+                .padding(.top, 40)
+                .padding(.horizontal, 16)
+
+                if case .error = viewModel.state {
+                    Text("Ошибка! Попробуйте еще раз")
+                        .foregroundColor(.white)
+                        .font(.system(size: 20, weight: .black))
+                        .multilineTextAlignment(.center)
+                        .padding(.top, 24)
+                }
+
+            case .loading:
+                ProgressView()
+                    .controlSize(.large)
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .padding(.top, 120)
             }
-            .padding(.top, 40)
-            .padding(.horizontal, 16)
 
             Spacer()
         }
