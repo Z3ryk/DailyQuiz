@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  StartQuizView.swift
 //  DailyQuiz
 //
 //  Created by Z3ryk on 01.08.2025.
@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreData
 
-struct ContentView: View {
+struct StartQuizView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
@@ -17,29 +17,21 @@ struct ContentView: View {
     private var items: FetchedResults<Item>
 
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-            Text("Select an item")
+        VStack {
+            HistoryButtonView { }
+                .padding(.top, 46)
+
+            Image(.logo)
+                .padding(.top, 114)
+
+            QuizLaunchView { }
+                .padding(.top, 40)
+                .padding(.horizontal, 16)
+
+            Spacer()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.purpleMain)
     }
 
     private func addItem() {
@@ -82,5 +74,5 @@ private let itemFormatter: DateFormatter = {
 }()
 
 #Preview {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    StartQuizView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
