@@ -33,9 +33,11 @@ struct StartQuizView: View {
             Image(.logo)
                 .padding(.top, 114)
 
-            QuizLaunchView { }
-                .padding(.top, 40)
-                .padding(.horizontal, 16)
+            QuizLaunchView {
+                viewModel.loadQuizInfo()
+            }
+            .padding(.top, 40)
+            .padding(.horizontal, 16)
 
             Spacer()
         }
