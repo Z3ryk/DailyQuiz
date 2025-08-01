@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct QuizLaunchView: View {
-
     // MARK: - Properties
 
     private let action: () -> Void
