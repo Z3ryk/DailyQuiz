@@ -9,12 +9,9 @@ import SwiftUI
 
 @main
 struct DailyQuizApp: App {
-    let persistenceController = PersistenceController.shared
-
     var body: some Scene {
         WindowGroup {
             StartQuizView(viewModel: StartQuizViewModel())
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }
