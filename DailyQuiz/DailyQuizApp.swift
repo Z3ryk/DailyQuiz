@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct DailyQuizApp: App {
+    @StateObject private var router = AppRouter()
+
     var body: some Scene {
         WindowGroup {
-            StartQuizView(viewModel: StartQuizViewModel())
+            NavigationContainer {
+                StartQuizView(viewModel: StartQuizViewModel(router: router))
+            }
+            .environmentObject(router)
         }
     }
 }
