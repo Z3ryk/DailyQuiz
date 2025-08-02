@@ -9,13 +9,22 @@ import SwiftUI
 
 enum Screen: Hashable {
     case quiz(quizInfo: QuizInfo)
+    case results(score: Int, totalQuestions: Int)
 
     @ViewBuilder
     @MainActor
-    func destinationView() -> some View {
+    func destinationView(router: AppRouter) -> some View {
         switch self {
         case .quiz(let quizInfo):
-            QuizView(quizInfo: quizInfo)
+            QuizView(viewModel: QuizViewModel(quizInfo: quizInfo, router: router))
+        case let .results(score, totalQuestions):
+            QuizResultsView(
+                viewModel: QuizResultsViewModel(
+                    score: score,
+                    totalQuestions: totalQuestions,
+                    router: router
+                )
+            )
         }
     }
 }

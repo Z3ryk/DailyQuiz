@@ -16,7 +16,7 @@ struct NavigationContainer<Content: View>: View {
         NavigationStack(path: $router.path) {
             content()
                 .navigationDestination(for: Screen.self) { screen in
-                    screen.destinationView()
+                    screen.destinationView(router: router)
                 }
         }
     }

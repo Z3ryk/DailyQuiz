@@ -13,11 +13,10 @@ final class QuizViewModel: ObservableObject {
     struct State {
         var currentQuestionIndex = 0
         var selectedAnswer: String?
-        var showResult = false
         var score = 0
         var shuffledAnswers: [String] = []
-        var timeRemaining: TimeInterval = Constants.totalTimeInSeconds
-        var isTimerRunning = false
+        var timeRemaining = Constants.totalTimeInSeconds
+        var showTimerExpiredOverlay = false
 
         static let initial: Self = .init()
     }
@@ -28,7 +27,8 @@ final class QuizViewModel: ObservableObject {
     
     private let quizInfo: QuizInfo
     private var timer: Timer?
-    
+    private let router: AppRouter
+
     var currentQuestion: QuizInfo.Result {
         quizInfo.results[state.currentQuestionIndex]
     }
@@ -40,32 +40,31 @@ final class QuizViewModel: ObservableObject {
     var questionNumberText: String {
         "Вопрос \(state.currentQuestionIndex + 1) из \(quizInfo.results.count)"
     }
-    
-    var resultText: String {
-        "Ваш результат: \(state.score) из \(quizInfo.results.count)"
+
+    var totalTimeInMinutes: String {
+        let totalSeconds = Constants.totalTimeInSeconds
+        let minutes = totalSeconds / Constants.oneMinuteInSeconds
+        let seconds = totalSeconds % Constants.oneMinuteInSeconds
+        return String(format: "%d:%02d", minutes, seconds)
     }
-    
-    var currentTimeText: String {
-        let minutes = Int(state.timeRemaining) / Constants.oneMinuteInSeconds
-        let seconds = Int(state.timeRemaining) % Constants.oneMinuteInSeconds
-        return String(format: "%02d:%02d", minutes, seconds)
-    }
-    
+
     var elapsedTimeText: String {
         let elapsedSeconds = Constants.totalTimeInSeconds - state.timeRemaining
-        let minutes = Int(elapsedSeconds) / Constants.oneMinuteInSeconds
-        let seconds = Int(elapsedSeconds) % Constants.oneMinuteInSeconds
+        let minutes = elapsedSeconds / Constants.oneMinuteInSeconds
+        let seconds = elapsedSeconds % Constants.oneMinuteInSeconds
         return String(format: "%02d:%02d", minutes, seconds)
     }
     
     var progressValue: Double {
-        (Constants.totalTimeInSeconds - state.timeRemaining) / Constants.totalTimeInSeconds
+        let elapsedTime = Double(Constants.totalTimeInSeconds - state.timeRemaining)
+        return elapsedTime / Double(Constants.totalTimeInSeconds)
     }
     
-    // MARK: - Initialization
-    
-    init(quizInfo: QuizInfo) {
+    // MARK: - Lifecycle
+
+    init(quizInfo: QuizInfo, router: AppRouter) {
         self.quizInfo = quizInfo
+        self.router = router
         updateShuffledAnswers()
         startTimer()
     }
@@ -88,7 +87,7 @@ final class QuizViewModel: ObservableObject {
 
     func nextQuestion() {
         if isLastQuestion {
-            state.showResult = true
+            router.navigateToResults(score: state.score, totalQuestions: quizInfo.results.count)
             stopTimer()
         } else {
             state.currentQuestionIndex += 1
@@ -96,13 +95,11 @@ final class QuizViewModel: ObservableObject {
             updateShuffledAnswers()
         }
     }
-    
-    func resetQuiz() {
-        state = .initial
-        updateShuffledAnswers()
-        startTimer()
+
+    func navigateToStart() {
+        router.popToRoot()
     }
-    
+
     // MARK: - Private Methods
     
     private func updateShuffledAnswers() {
@@ -112,7 +109,6 @@ final class QuizViewModel: ObservableObject {
     }
     
     private func startTimer() {
-        state.isTimerRunning = true
         timer = Timer.scheduledTimer(
             withTimeInterval: 1.0,
             repeats: true
@@ -122,14 +118,13 @@ final class QuizViewModel: ObservableObject {
     }
     
     private func stopTimer() {
-        state.isTimerRunning = false
         timer?.invalidate()
         timer = nil
     }
     
     private func updateTimer() {
         guard state.timeRemaining > 0 else {
-            state.showResult = true
+            state.showTimerExpiredOverlay = true
             stopTimer()
             return
         }
@@ -140,7 +135,7 @@ final class QuizViewModel: ObservableObject {
 
 private extension QuizViewModel {
     enum Constants {
-        static let totalTimeInSeconds: CGFloat = 300.0
+        static let totalTimeInSeconds: Int = 300
         static let oneMinuteInSeconds: Int = 60
     }
 }

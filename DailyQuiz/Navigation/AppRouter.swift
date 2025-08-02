@@ -13,4 +13,12 @@ final class AppRouter: ObservableObject {
     func navigateToQuiz(with quizInfo: QuizInfo) {
         path.append(.quiz(quizInfo: quizInfo))
     }
+    
+    func navigateToResults(score: Int, totalQuestions: Int) {
+        path.append(.results(score: score, totalQuestions: totalQuestions))
+    }
+
+    func popToRoot() {
+        path.removeAll()
+    }
 }

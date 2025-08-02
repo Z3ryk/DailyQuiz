@@ -19,4 +19,18 @@ struct QuizInfo: Decodable, Hashable {
         let correctAnswer: String
         let incorrectAnswers: [String]
     }
+
+    static let mock: Self = QuizInfo(
+        responseCode: 0,
+        results: [
+            QuizInfo.Result(
+                type: "multiple",
+                difficulty: "easy",
+                category: "General Knowledge",
+                question: "What is the capital of France?",
+                correctAnswer: "Paris",
+                incorrectAnswers: ["London", "Berlin", "Madrid"]
+            )
+        ]
+    )
 }
