@@ -26,14 +26,23 @@ final class StartQuizViewModel: ObservableObject {
     // MARK: - Internal
 
     func loadQuizInfo() {
-        Task {
-            self.state = .loading
+        Task { [weak self] in
+            guard let self else { return }
+
+            state = .loading
 
             do {
-                let _ = try await networkService.loadQuizInfo()
-                self.state = .initial
+                let quizInfo = try await networkService.loadQuizInfo()
+
+                guard quizInfo.responseCode == 0 else {
+                    state = .error
+                    return
+                }
+
+                router.navigateToQuiz(with: quizInfo)
+                state = .initial
             } catch {
-                self.state = .error
+                state = .error
             }
         }
     }

@@ -42,7 +42,7 @@ struct StartQuizView: View {
 
                 if case .error = viewModel.state {
                     Text("Ошибка! Попробуйте еще раз")
-                        .foregroundColor(.white)
+                        .foregroundStyle(.white)
                         .font(.system(size: 20, weight: .black))
                         .multilineTextAlignment(.center)
                         .padding(.top, 24)
