@@ -13,7 +13,6 @@ final class QuizViewModel: ObservableObject {
     struct State {
         var currentQuestionIndex = 0
         var selectedAnswer: String?
-        var showResult = false
         var score = 0
         var shuffledAnswers: [String] = []
         var timeRemaining: TimeInterval = Constants.totalTimeInSeconds
@@ -90,7 +89,7 @@ final class QuizViewModel: ObservableObject {
 
     func nextQuestion() {
         if isLastQuestion {
-            state.showResult = true
+            router.navigateToResults(score: state.score, totalQuestions: quizInfo.results.count)
             stopTimer()
         } else {
             state.currentQuestionIndex += 1
