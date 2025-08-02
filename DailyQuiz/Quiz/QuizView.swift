@@ -10,58 +10,61 @@ import SwiftUI
 struct QuizView: View {
     // MARK: - Properties
 
-    let quizInfo: QuizInfo
-    @State private var currentQuestionIndex = 0
-    @State private var selectedAnswer: String?
-    @State private var showResult = false
-    @State private var score = 0
-    @State private var shuffledAnswers: [String] = []
+    @ObservedObject
+    private var viewModel: QuizViewModel
+
     @Environment(\.dismiss) private var dismiss
-
-    // MARK: - Computed Properties
-
-    private var currentQuestion: QuizInfo.Result {
-        quizInfo.results[currentQuestionIndex]
-    }
-
-    private var isLastQuestion: Bool {
-        currentQuestionIndex == quizInfo.results.count - 1
-    }
 
     // MARK: - Views
 
     var body: some View {
         VStack(spacing: 20) {
             VStack(spacing: 24) {
-                // Номер вопроса
-                Text("Вопрос \(currentQuestionIndex + 1) из \(quizInfo.results.count)")
+                VStack(spacing: 8) {
+                    HStack {
+                        Text(viewModel.elapsedTimeText)
+                            .foregroundStyle(.purpleDark)
+                            .font(.system(size: 10, weight: .regular))
+                        
+                        Spacer()
+                        
+                        Text("5:00")
+                            .foregroundStyle(.purpleDark)
+                            .font(.system(size: 10, weight: .regular))
+                    }
+                    
+                    ProgressView(value: viewModel.progressValue)
+                        .progressViewStyle(LinearProgressViewStyle(tint: .purpleDark))
+                        .scaleEffect(y: 1)
+                }
+                .padding(.horizontal, 16)
+
+                Text(viewModel.questionNumberText)
                     .foregroundStyle(.purpleLight)
                     .font(.system(size: 16, weight: .semibold))
 
-                // Вопрос
-                Text(currentQuestion.question)
+                Text(viewModel.currentQuestion.question)
                     .foregroundStyle(.black)
                     .font(.system(size: 18, weight: .semibold))
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 16)
 
-                // Ответы
                 VStack(spacing: 12) {
-                    ForEach(shuffledAnswers, id: \.self) { answer in
+                    ForEach(viewModel.state.shuffledAnswers, id: \.self) { answer in
                         Button(action: {
-                            selectedAnswer = answer
+                            viewModel.setSelectedAnswer(to: answer)
                         }) {
                             HStack(spacing: 16) {
                                 ZStack {
                                     Circle()
-                                        .fill(selectedAnswer == answer ? Color.purpleDark : Color.white)
+                                        .fill(viewModel.state.selectedAnswer == answer ? Color.purpleDark : Color.white)
                                         .frame(width: 24, height: 24)
                                         .overlay(
                                             Circle()
                                                 .stroke(Color.black, lineWidth: 1)
                                         )
 
-                                    if selectedAnswer == answer {
+                                    if viewModel.state.selectedAnswer == answer {
                                         Image(systemName: "checkmark")
                                             .foregroundStyle(.white)
                                             .font(.system(size: 12, weight: .bold))
@@ -78,40 +81,35 @@ struct QuizView: View {
                             .padding(.vertical, 16)
                             .background(
                                 RoundedRectangle(cornerRadius: 16)
-                                    .fill(selectedAnswer == answer ? Color.white : Color.gray.opacity(0.3))
+                                    .fill(viewModel.state.selectedAnswer == answer ? Color.white : Color.gray.opacity(0.3))
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(selectedAnswer == answer ? Color.purpleDark : Color.clear, lineWidth: 1)
+                                            .stroke(viewModel.state.selectedAnswer == answer ? Color.purpleDark : Color.clear, lineWidth: 1)
                                     )
                             )
                         }
-                        .disabled(selectedAnswer != nil)
                     }
                 }
                 .padding(.horizontal, 16)
 
-                // Кнопка ДАЛЕЕ
-                Button(action: {
-                    if selectedAnswer == currentQuestion.correctAnswer {
-                        score += 1
-                    }
-
-                    if isLastQuestion {
-                        showResult = true
-                    } else {
+                Button(
+                    action: {
                         withAnimation(.easeInOut) {
-                            nextQuestion()}
+                            viewModel.checkAnswer()
+                            viewModel.nextQuestion()
+                        }
+                    },
+                    label: {
+                        Text("ДАЛЕЕ")
+                            .foregroundStyle(viewModel.state.selectedAnswer != nil ? .white : .gray)
+                            .font(.system(size: 16, weight: .bold))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(viewModel.state.selectedAnswer != nil ? Color.purpleMain : Color.gray.opacity(0.3))
+                            .cornerRadius(12)
                     }
-                }) {
-                    Text("ДАЛЕЕ")
-                        .foregroundStyle(selectedAnswer != nil ? .white : .gray)
-                        .font(.system(size: 16, weight: .bold))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
-                        .background(selectedAnswer != nil ? Color.purpleMain : Color.gray.opacity(0.3))
-                        .cornerRadius(12)
-                }
-                .disabled(selectedAnswer == nil)
+                )
+                .disabled(viewModel.state.selectedAnswer == nil)
                 .padding(.horizontal, 16)
                 .padding(.top, 43)
             }
@@ -134,14 +132,18 @@ struct QuizView: View {
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: {
-                    dismiss()
-                }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundStyle(.white)
-                        .font(.system(size: 20, weight: .semibold))
-                        .padding(.top, 43)
-                }
+                Button(
+                    action: {
+                        dismiss()
+                    },
+                    label: {
+                        Image(systemName: "chevron.left")
+                            .foregroundStyle(.white)
+                            .frame(width: 24, height: 24, alignment: .center)
+                            .font(.system(size: 20, weight: .semibold))
+                            .padding(.top, 43)
+                    }
+                )
             }
 
             ToolbarItem(placement: .principal) {
@@ -152,55 +154,38 @@ struct QuizView: View {
                     .padding(.top, 35)
             }
         }
-        .alert("Результат", isPresented: $showResult) {
+        .alert("Результат", isPresented: $viewModel.state.showResult) {
             Button("Начать заново") {
-                resetQuiz()
+                viewModel.resetQuiz()
             }
         } message: {
-            Text("Ваш результат: \(score) из \(quizInfo.results.count)")
-        }
-        .onAppear {
-            updateShuffledAnswers()
+            Text(viewModel.resultText)
         }
     }
 
-    // MARK: - Private
+    // MARK: - Initialization
 
-    private func nextQuestion() {
-        currentQuestionIndex += 1
-        selectedAnswer = nil
-        updateShuffledAnswers()
-    }
-
-    private func resetQuiz() {
-        currentQuestionIndex = 0
-        selectedAnswer = nil
-        score = 0
-        showResult = false
-        updateShuffledAnswers()
-    }
-
-    private func updateShuffledAnswers() {
-        var answers = currentQuestion.incorrectAnswers
-        answers.append(currentQuestion.correctAnswer)
-        shuffledAnswers = answers.shuffled()
+    init(quizInfo: QuizInfo) {
+        self.viewModel = QuizViewModel(quizInfo: quizInfo)
     }
 }
 
 #Preview {
     NavigationStack {
-        QuizView(quizInfo: QuizInfo(
-            responseCode: 0,
-            results: [
-                QuizInfo.Result(
-                    type: "multiple",
-                    difficulty: "easy",
-                    category: "General Knowledge",
-                    question: "What is the capital of France?",
-                    correctAnswer: "Paris",
-                    incorrectAnswers: ["London", "Berlin", "Madrid"]
-                )
-            ]
-        ))
+        QuizView(
+            quizInfo: QuizInfo(
+                responseCode: 0,
+                results: [
+                    QuizInfo.Result(
+                        type: "multiple",
+                        difficulty: "easy",
+                        category: "General Knowledge",
+                        question: "What is the capital of France?",
+                        correctAnswer: "Paris",
+                        incorrectAnswers: ["London", "Berlin", "Madrid"]
+                    )
+                ]
+            )
+        )
     }
 }
