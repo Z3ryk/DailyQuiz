@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "custom_star_fill.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
