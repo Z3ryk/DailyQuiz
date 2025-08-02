@@ -13,8 +13,6 @@ struct QuizView: View {
     @ObservedObject
     private var viewModel: QuizViewModel
 
-    @Environment(\.dismiss) private var dismiss
-
     // MARK: - Views
 
     var body: some View {
@@ -140,9 +138,7 @@ struct QuizView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(
-                    action: {
-                        dismiss()
-                    },
+                    action: { viewModel.navigateToStart() },
                     label: {
                         Image(systemName: "chevron.left")
                             .foregroundStyle(.white)

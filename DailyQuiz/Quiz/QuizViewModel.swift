@@ -28,7 +28,8 @@ final class QuizViewModel: ObservableObject {
     
     private let quizInfo: QuizInfo
     private var timer: Timer?
-    
+    private let router: AppRouter
+
     var currentQuestion: QuizInfo.Result {
         quizInfo.results[state.currentQuestionIndex]
     }
@@ -62,10 +63,11 @@ final class QuizViewModel: ObservableObject {
         (Constants.totalTimeInSeconds - state.timeRemaining) / Constants.totalTimeInSeconds
     }
     
-    // MARK: - Initialization
-    
-    init(quizInfo: QuizInfo) {
+    // MARK: - Lifecycle
+
+    init(quizInfo: QuizInfo, router: AppRouter) {
         self.quizInfo = quizInfo
+        self.router = router
         updateShuffledAnswers()
         startTimer()
     }
@@ -96,11 +98,9 @@ final class QuizViewModel: ObservableObject {
             updateShuffledAnswers()
         }
     }
-    
-    func resetQuiz() {
-        state = .initial
-        updateShuffledAnswers()
-        startTimer()
+
+    func navigateToStart() {
+        router.popToRoot()
     }
     
     // MARK: - Private Methods
