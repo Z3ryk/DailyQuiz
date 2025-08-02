@@ -129,7 +129,7 @@ final class QuizViewModel: ObservableObject {
     
     private func updateTimer() {
         guard state.timeRemaining > 0 else {
-            state.showResult = true
+            state.showTimerExpired = true
             stopTimer()
             return
         }
