@@ -15,7 +15,7 @@ final class QuizViewModel: ObservableObject {
         var selectedAnswer: String?
         var score = 0
         var shuffledAnswers: [String] = []
-        var timeRemaining: TimeInterval = Constants.totalTimeInSeconds
+        var timeRemaining = Constants.totalTimeInSeconds
         var isTimerRunning = false
 
         static let initial: Self = .init()
@@ -40,26 +40,24 @@ final class QuizViewModel: ObservableObject {
     var questionNumberText: String {
         "Вопрос \(state.currentQuestionIndex + 1) из \(quizInfo.results.count)"
     }
-    
-    var resultText: String {
-        "Ваш результат: \(state.score) из \(quizInfo.results.count)"
+
+    var totalTimeInMinutes: String {
+        let totalSeconds = Constants.totalTimeInSeconds
+        let minutes = totalSeconds / Constants.oneMinuteInSeconds
+        let seconds = totalSeconds % Constants.oneMinuteInSeconds
+        return String(format: "%d:%02d", minutes, seconds)
     }
-    
-    var currentTimeText: String {
-        let minutes = Int(state.timeRemaining) / Constants.oneMinuteInSeconds
-        let seconds = Int(state.timeRemaining) % Constants.oneMinuteInSeconds
-        return String(format: "%02d:%02d", minutes, seconds)
-    }
-    
+
     var elapsedTimeText: String {
         let elapsedSeconds = Constants.totalTimeInSeconds - state.timeRemaining
-        let minutes = Int(elapsedSeconds) / Constants.oneMinuteInSeconds
-        let seconds = Int(elapsedSeconds) % Constants.oneMinuteInSeconds
+        let minutes = elapsedSeconds / Constants.oneMinuteInSeconds
+        let seconds = elapsedSeconds % Constants.oneMinuteInSeconds
         return String(format: "%02d:%02d", minutes, seconds)
     }
     
     var progressValue: Double {
-        (Constants.totalTimeInSeconds - state.timeRemaining) / Constants.totalTimeInSeconds
+        let elapsedTime = Double(Constants.totalTimeInSeconds - state.timeRemaining)
+        return elapsedTime / Double(Constants.totalTimeInSeconds)
     }
     
     // MARK: - Lifecycle
@@ -139,7 +137,7 @@ final class QuizViewModel: ObservableObject {
 
 private extension QuizViewModel {
     enum Constants {
-        static let totalTimeInSeconds: CGFloat = 300.0
+        static let totalTimeInSeconds: Int = 300
         static let oneMinuteInSeconds: Int = 60
     }
 }

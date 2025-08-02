@@ -23,14 +23,14 @@ struct QuizView: View {
                         Text(viewModel.elapsedTimeText)
                             .foregroundStyle(.purpleDark)
                             .font(.system(size: 10, weight: .regular))
-                        
+
                         Spacer()
-                        
-                        Text("5:00")
+
+                        Text(viewModel.totalTimeInMinutes)
                             .foregroundStyle(.purpleDark)
                             .font(.system(size: 10, weight: .regular))
                     }
-                    
+
                     ProgressView(value: viewModel.progressValue)
                         .progressViewStyle(LinearProgressViewStyle(tint: .purpleDark))
                         .scaleEffect(y: 1)
@@ -157,37 +157,21 @@ struct QuizView: View {
                     .padding(.top, 35)
             }
         }
-        .alert("Результат", isPresented: $viewModel.state.showResult) {
-            Button("Начать заново") {
-                viewModel.resetQuiz()
-            }
-        } message: {
-            Text(viewModel.resultText)
-        }
     }
 
-    // MARK: - Initialization
+    // MARK: - Lifecycle
 
-    init(quizInfo: QuizInfo) {
-        self.viewModel = QuizViewModel(quizInfo: quizInfo)
+    init(viewModel: QuizViewModel) {
+        self.viewModel = viewModel
     }
 }
 
 #Preview {
     NavigationStack {
         QuizView(
-            quizInfo: QuizInfo(
-                responseCode: 0,
-                results: [
-                    QuizInfo.Result(
-                        type: "multiple",
-                        difficulty: "easy",
-                        category: "General Knowledge",
-                        question: "What is the capital of France?",
-                        correctAnswer: "Paris",
-                        incorrectAnswers: ["London", "Berlin", "Madrid"]
-                    )
-                ]
+            viewModel: QuizViewModel(
+                quizInfo: .mock,
+                router: AppRouter()
             )
         )
     }
