@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct QuizInfo: Decodable {
+struct QuizInfo: Decodable, Hashable {
     let responseCode: Int
     let results: [Result]
 
-    struct Result: Decodable {
+    struct Result: Decodable, Hashable {
         let type: String
         let difficulty: String
         let category: String

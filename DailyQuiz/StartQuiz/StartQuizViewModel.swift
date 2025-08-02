@@ -12,13 +12,15 @@ final class StartQuizViewModel: ObservableObject {
     // MARK: - Properties
 
     private let networkService: QuizInfoNetworkService
+    private let router: AppRouter
 
     @Published var state: StartQuizView.State = .initial
 
     // MARK: - Lifecycle
 
-    init() {
+    init(router: AppRouter) {
         self.networkService = QuizInfoNetworkService()
+        self.router = router
     }
 
     // MARK: - Internal
