@@ -129,7 +129,7 @@ struct QuizView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .overlay {
-            if viewModel.state.showTimerExpired {
+            if viewModel.state.showTimerExpiredOverlay {
                 TimerExpiredView {
                     viewModel.navigateToStart()
                 }

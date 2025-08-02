@@ -16,7 +16,7 @@ final class QuizViewModel: ObservableObject {
         var score = 0
         var shuffledAnswers: [String] = []
         var timeRemaining = Constants.totalTimeInSeconds
-        var isTimerRunning = false
+        var showTimerExpiredOverlay = false
 
         static let initial: Self = .init()
     }
@@ -99,7 +99,7 @@ final class QuizViewModel: ObservableObject {
     func navigateToStart() {
         router.popToRoot()
     }
-    
+
     // MARK: - Private Methods
     
     private func updateShuffledAnswers() {
@@ -109,7 +109,6 @@ final class QuizViewModel: ObservableObject {
     }
     
     private func startTimer() {
-        state.isTimerRunning = true
         timer = Timer.scheduledTimer(
             withTimeInterval: 1.0,
             repeats: true
@@ -119,14 +118,13 @@ final class QuizViewModel: ObservableObject {
     }
     
     private func stopTimer() {
-        state.isTimerRunning = false
         timer?.invalidate()
         timer = nil
     }
     
     private func updateTimer() {
         guard state.timeRemaining > 0 else {
-            state.showTimerExpired = true
+            state.showTimerExpiredOverlay = true
             stopTimer()
             return
         }
