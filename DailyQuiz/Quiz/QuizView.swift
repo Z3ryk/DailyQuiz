@@ -17,6 +17,26 @@ struct QuizView: View {
 
     var body: some View {
         VStack(spacing: 20) {
+            HStack {
+                Button(action: viewModel.navigateToStart) {
+                    Image(systemName: "chevron.left")
+                        .foregroundStyle(.white)
+                        .frame(width: 24, height: 24, alignment: .center)
+                        .font(.system(size: 20, weight: .semibold))
+                }
+
+                Spacer()
+
+                Image(.logo)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 40)
+
+                Spacer()
+            }
+            .padding(.top, 36)
+            .padding(.horizontal, 26)
+
             VStack(spacing: 24) {
                 VStack(spacing: 8) {
                     HStack {
@@ -46,6 +66,7 @@ struct QuizView: View {
                     .font(.system(size: 18, weight: .semibold))
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 16)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 VStack(spacing: 12) {
                     ForEach(viewModel.state.shuffledAnswers, id: \.self) { answer in
@@ -74,6 +95,7 @@ struct QuizView: View {
                                     .font(.system(size: 16, weight: .regular))
                                     .multilineTextAlignment(.leading)
                                     .frame(maxWidth: .infinity, alignment: .leading)
+                                    .fixedSize(horizontal: false, vertical: true)
                             }
                             .padding(.horizontal, 16)
                             .padding(.vertical, 16)
@@ -135,25 +157,6 @@ struct QuizView: View {
                     buttonTitle: String(localized: "start_over"),
                     action: viewModel.navigateToStart
                 )
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(
-                    action: { viewModel.navigateToStart() },
-                    label: {
-                        Image(systemName: "chevron.left")
-                            .foregroundStyle(.white)
-                            .frame(width: 24, height: 24, alignment: .center)
-                    }
-                )
-            }
-
-            ToolbarItem(placement: .principal) {
-                Image(.logo)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 40)
             }
         }
     }

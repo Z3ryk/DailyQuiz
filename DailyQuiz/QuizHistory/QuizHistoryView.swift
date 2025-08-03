@@ -17,6 +17,25 @@ struct QuizHistoryView: View {
 
     var body: some View {
         VStack(spacing: 0) {
+            HStack {
+                Button(action: viewModel.popToRoot) {
+                    Image(systemName: "chevron.left")
+                        .foregroundStyle(.white)
+                        .frame(width: 24, height: 24, alignment: .center)
+                        .font(.system(size: 20, weight: .semibold))
+                }
+
+                Spacer()
+
+                Text(String(localized: "history"))
+                    .font(.system(size: 32, weight: .black))
+                    .foregroundStyle(.white)
+
+                Spacer()
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 32)
+
             if viewModel.historyItems.isEmpty {
                 VStack {
                     emptyStateView
@@ -37,24 +56,6 @@ struct QuizHistoryView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.purpleMain)
         .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(
-                    action: viewModel.popToRoot,
-                    label: {
-                        Image(systemName: "chevron.left")
-                            .foregroundStyle(.white)
-                    }
-                )
-                .frame(width: 24, height: 24, alignment: .center)
-            }
-
-            ToolbarItem(placement: .principal) {
-                Text(String(localized: "history"))
-                    .font(.system(size: 32, weight: .black))
-                    .foregroundStyle(.white)
-            }
-        }
         .overlay {
             if viewModel.showingDeleteConfirmationAlert {
                 AlertView(

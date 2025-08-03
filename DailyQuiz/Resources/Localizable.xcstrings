@@ -430,14 +430,14 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "You can take the quiz again when you are ready."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Вы можете пройти викторину снова, когда будете готовы."
+            "value" : "Вы можете пройти викторину снова,\nкогда будете готовы."
           }
         }
       }
