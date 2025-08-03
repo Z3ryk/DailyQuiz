@@ -57,7 +57,7 @@ struct AlertView: View {
     AlertView(
         title: "Время вышло!",
         subtitle: "Вы не успели завершить викторину.\nПопробуйте еще раз!",
-        buttonTitle: "НАЧАТЬ ЗАНОВО",
+        buttonTitle: String(localized: "start_over"),
         action: { }
     )
     .background(.purpleMain)

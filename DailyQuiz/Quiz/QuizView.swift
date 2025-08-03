@@ -98,7 +98,7 @@ struct QuizView: View {
                         }
                     },
                     label: {
-                        Text("ДАЛЕЕ")
+                        Text(String(localized: "next"))
                             .foregroundStyle(viewModel.state.selectedAnswer != nil ? .white : .gray)
                             .font(.system(size: 16, weight: .bold))
                             .frame(maxWidth: .infinity)
@@ -118,7 +118,7 @@ struct QuizView: View {
             .padding(.horizontal, 26)
             .padding(.top, 40)
 
-            Text("Вернуться к предыдущим вопросам нельзя")
+            Text(String(localized: "no_back"))
                 .font(.system(size: 10, weight: .regular))
                 .foregroundStyle(.white)
 
@@ -130,9 +130,9 @@ struct QuizView: View {
         .overlay {
             if viewModel.state.showTimerExpiredOverlay {
                 AlertView(
-                    title: "Время вышло!",
-                    subtitle: "Вы не успели завершить викторину.\nПопробуйте еще раз!",
-                    buttonTitle: "НАЧАТЬ ЗАНОВО",
+                    title: String(localized: "time_expired"),
+                    subtitle: String(localized: "time_expired_try_again"),
+                    buttonTitle: String(localized: "start_over"),
                     action: viewModel.navigateToStart
                 )
             }

@@ -19,7 +19,7 @@ struct HistoryButtonView: View {
             action: action,
             label: {
                 HStack(spacing: 12) {
-                    Text("История")
+                    Text(String(localized: "history"))
                         .font(.system(size: 12, weight: .semibold))
 
                     Image(.historyIcon)

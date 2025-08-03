@@ -17,7 +17,7 @@ struct QuizResultsView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            Text("Результаты")
+            Text(String(localized: "results_title"))
                 .foregroundStyle(.white)
                 .font(.system(size: 32, weight: .black))
                 .padding(.top, 32)
@@ -53,7 +53,7 @@ struct QuizResultsView: View {
                 Button(
                     action: { viewModel.startOver() },
                     label: {
-                        Text("НАЧАТЬ ЗАНОВО")
+                        Text(String(localized: "start_over"))
                             .foregroundStyle(.white)
                             .font(.system(size: 16, weight: .bold))
                             .frame(maxWidth: .infinity)

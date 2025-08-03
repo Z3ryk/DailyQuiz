@@ -40,12 +40,12 @@ final class QuizResultsViewModel: ObservableObject {
     
     var resultDescription: String {
         switch state.score {
-        case 5: "\(scoreText) — вы ответили на всё правильно.\nЭто блестящий результат!"
-        case 4: "\(scoreText) — очень близко к совершенству.\nЕщё один шаг!"
-        case 3: "\(scoreText) — вы на верном пути.\nПродолжайте тренироваться!"
-        case 2: "\(scoreText) — не расстраивайтесь,\nпопробуйте ещё раз!"
-        case 1: "\(scoreText) - иногда просто не ваш день.\nСледующая попытка будет лучше!"
-        default: "\(scoreText) — не отчаивайтесь.\nНачните заново и удивите себя!"
+        case 5: "\(scoreText)" + String(localized: "results_description_five")
+        case 4: "\(scoreText)" + String(localized: "results_description_four")
+        case 3: "\(scoreText)" + String(localized: "results_description_three")
+        case 2: "\(scoreText)" + String(localized: "results_description_two")
+        case 1: "\(scoreText)" + String(localized: "results_description_one")
+        default: "\(scoreText)" + String(localized: "results_description_zero")
         }
     }
     
