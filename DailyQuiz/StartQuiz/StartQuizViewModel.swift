@@ -46,4 +46,8 @@ final class StartQuizViewModel: ObservableObject {
             }
         }
     }
+    
+    func navigateToHistory() {
+        router.navigateToHistory()
+    }
 }

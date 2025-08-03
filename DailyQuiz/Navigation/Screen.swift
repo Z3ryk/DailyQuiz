@@ -10,6 +10,7 @@ import SwiftUI
 enum Screen: Hashable {
     case quiz(quizInfo: QuizInfo)
     case results(score: Int, totalQuestions: Int)
+    case history
 
     @ViewBuilder
     @MainActor
@@ -25,6 +26,8 @@ enum Screen: Hashable {
                     router: router
                 )
             )
+        case .history:
+            QuizHistoryView(viewModel: QuizHistoryViewModel(router: router))
         }
     }
 }
