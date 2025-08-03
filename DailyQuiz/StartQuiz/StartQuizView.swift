@@ -26,8 +26,11 @@ struct StartQuizView: View {
 
     var body: some View {
         VStack {
-            HistoryButtonView { }
-                .padding(.top, 46)
+            HistoryButtonView {
+                viewModel.navigateToHistory()
+            }
+            .disabled(viewModel.state == .loading)
+            .padding(.top, 46)
 
             Image(.logo)
                 .padding(.top, 114)

@@ -28,6 +28,7 @@ final class QuizViewModel: ObservableObject {
     private let quizInfo: QuizInfo
     private var timer: Timer?
     private let router: AppRouter
+    private let historyManager: QuizHistoryManager
 
     var currentQuestion: QuizInfo.Result {
         quizInfo.results[state.currentQuestionIndex]
@@ -62,9 +63,15 @@ final class QuizViewModel: ObservableObject {
     
     // MARK: - Lifecycle
 
-    init(quizInfo: QuizInfo, router: AppRouter) {
+    init(
+        quizInfo: QuizInfo,
+        router: AppRouter,
+        historyManager: QuizHistoryManager = .shared
+    ) {
         self.quizInfo = quizInfo
         self.router = router
+        self.historyManager = historyManager
+
         updateShuffledAnswers()
         startTimer()
     }
@@ -87,6 +94,15 @@ final class QuizViewModel: ObservableObject {
 
     func nextQuestion() {
         if isLastQuestion {
+            historyManager.saveQuizHistoryItem(
+                QuizHistoryItem(
+                    id: UUID(),
+                    title: "Quiz \(historyManager.entities.count + 1)",
+                    score: state.score,
+                    totalQuestions: quizInfo.results.count,
+                    completedAt: Date()
+                )
+            )
             router.navigateToResults(score: state.score, totalQuestions: quizInfo.results.count)
             stopTimer()
         } else {
