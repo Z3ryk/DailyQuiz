@@ -11,15 +11,15 @@ import Foundation
 final class StartQuizViewModel: ObservableObject {
     // MARK: - Properties
 
-    private let networkService: QuizInfoNetworkService
+    private let httpClient: HTTPClient
     private let router: AppRouter
 
     @Published var state: StartQuizView.State = .initial
 
     // MARK: - Lifecycle
 
-    init(router: AppRouter) {
-        self.networkService = QuizInfoNetworkService()
+    init(httpClient: HTTPClient, router: AppRouter) {
+        self.httpClient = httpClient
         self.router = router
     }
 
@@ -32,7 +32,7 @@ final class StartQuizViewModel: ObservableObject {
             state = .loading
 
             do {
-                let quizInfo = try await networkService.loadQuizInfo()
+                let quizInfo: QuizInfo = try await httpClient.get(from: Constants.quizURL)
 
                 guard quizInfo.responseCode == 0 else {
                     state = .error
@@ -49,5 +49,11 @@ final class StartQuizViewModel: ObservableObject {
     
     func navigateToHistory() {
         router.navigateToHistory()
+    }
+}
+
+private extension StartQuizViewModel {
+    enum Constants {
+        static let quizURL: String = "https://opentdb.com/api.php?amount=5&category=23&difficulty=easy&type=multiple"
     }
 }
