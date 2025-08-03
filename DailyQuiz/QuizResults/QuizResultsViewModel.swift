@@ -29,12 +29,12 @@ final class QuizResultsViewModel: ObservableObject {
     
     var resultTitle: String {
         switch state.score {
-        case 5: "Идеально!"
-        case 4: "Почти идеально!"
-        case 3: "Хороший результат!"
-        case 2: "Есть над чем поработать!"
-        case 1: "Сложный вопрос?"
-        default: "Бывает и так!"
+        case 5: String(localized: "results_title_five")
+        case 4: String(localized: "results_title_four")
+        case 3: String(localized: "results_title_three")
+        case 2: String(localized: "results_title_two")
+        case 1: String(localized: "results_title_one")
+        default: String(localized: "results_title_zero")
         }
     }
     
