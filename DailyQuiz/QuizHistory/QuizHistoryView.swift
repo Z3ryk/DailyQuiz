@@ -34,10 +34,8 @@ struct QuizHistoryView: View {
 
             Spacer()
         }
-        .padding(.top, 32)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.purpleMain)
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -46,18 +44,15 @@ struct QuizHistoryView: View {
                     label: {
                         Image(systemName: "chevron.left")
                             .foregroundStyle(.white)
-                            .frame(width: 24, height: 24, alignment: .center)
-                            .font(.system(size: 20, weight: .semibold))
-                            .padding(.top, 32)
                     }
                 )
+                .frame(width: 24, height: 24, alignment: .center)
             }
 
             ToolbarItem(placement: .principal) {
                 Text("История")
                     .font(.system(size: 32, weight: .black))
                     .foregroundStyle(.white)
-                    .padding(.top, 32)
             }
         }
         .overlay {
@@ -120,9 +115,9 @@ struct QuizHistoryView: View {
                     )
                 }
             }
-            .offset(y: 40)
             .padding(.horizontal, 26)
         }
+        .padding(.top, 40)
     }
 
     // MARK: - Footer View

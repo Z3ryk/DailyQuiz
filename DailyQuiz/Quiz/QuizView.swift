@@ -126,7 +126,6 @@ struct QuizView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.purpleMain)
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .overlay {
             if viewModel.state.showTimerExpiredOverlay {
@@ -146,8 +145,6 @@ struct QuizView: View {
                         Image(systemName: "chevron.left")
                             .foregroundStyle(.white)
                             .frame(width: 24, height: 24, alignment: .center)
-                            .font(.system(size: 20, weight: .semibold))
-                            .padding(.top, 43)
                     }
                 )
             }
@@ -157,7 +154,6 @@ struct QuizView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(height: 40)
-                    .padding(.top, 35)
             }
         }
     }
