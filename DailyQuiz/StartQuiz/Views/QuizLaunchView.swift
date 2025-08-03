@@ -16,12 +16,12 @@ struct QuizLaunchView: View {
 
     var body: some View {
         VStack(spacing: 40) {
-            Text("Добро пожаловать в DailyQuiz!")
+            Text(String(localized: "welcome_title"))
                 .multilineTextAlignment(.center)
                 .font(.system(size: 28, weight: .bold))
 
             Button(action: action) {
-                Text("НАЧАТЬ ВИКТОРИНУ")
+                Text(String(localized: "start_quiz"))
                     .padding(.vertical, 16)
                     .foregroundStyle(.white)
                     .font(.system(size: 16, weight: .black))

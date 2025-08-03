@@ -44,7 +44,7 @@ struct StartQuizView: View {
                 .padding(.horizontal, 16)
 
                 if case .error = viewModel.state {
-                    Text("Ошибка! Попробуйте еще раз")
+                    Text(String(localized: "download_error"))
                         .foregroundStyle(.white)
                         .font(.system(size: 20, weight: .black))
                         .multilineTextAlignment(.center)

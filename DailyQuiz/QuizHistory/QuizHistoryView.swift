@@ -50,7 +50,7 @@ struct QuizHistoryView: View {
             }
 
             ToolbarItem(placement: .principal) {
-                Text("История")
+                Text(String(localized: "history"))
                     .font(.system(size: 32, weight: .black))
                     .foregroundStyle(.white)
             }
@@ -58,9 +58,9 @@ struct QuizHistoryView: View {
         .overlay {
             if viewModel.showingDeleteConfirmationAlert {
                 AlertView(
-                    title: "Попытка удалена",
-                    subtitle: "Вы можете пройти викторину снова, когда будете готовы.",
-                    buttonTitle: "ХОРОШО",
+                    title: String(localized: "quiz_deleted"),
+                    subtitle: String(localized: "try_again"),
+                    buttonTitle: String(localized: "ok"),
                     action: viewModel.dismissDeleteConfirmationAlert
                 )
             }
@@ -71,13 +71,13 @@ struct QuizHistoryView: View {
 
     private var emptyStateView: some View {
         VStack(spacing: 40) {
-            Text("Вы еще не проходили ни одной викторины")
+            Text(String(localized: "no_quiz"))
                 .font(.system(size: 20, weight: .regular))
                 .foregroundStyle(.black)
                 .multilineTextAlignment(.center)
 
             Button(action: viewModel.popToRoot) {
-                Text("НАЧАТЬ ВИКТОРИНУ")
+                Text(String(localized: "start_quiz"))
                     .font(.system(size: 16, weight: .bold))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
@@ -109,7 +109,7 @@ struct QuizHistoryView: View {
                             Button(role: .destructive) {
                                 viewModel.deleteItem(item)
                             } label: {
-                                Label("Удалить", systemImage: "trash")
+                                Label(String(localized: "delete"), systemImage: "trash")
                             }
                         }
                     )
