@@ -72,5 +72,10 @@ struct StartQuizView: View {
 }
 
 #Preview {
-    StartQuizView(viewModel: StartQuizViewModel(router: AppRouter()))
+    StartQuizView(
+        viewModel: StartQuizViewModel(
+            httpClient: HTTPClient(),
+            router: AppRouter()
+        )
+    )
 }

@@ -14,7 +14,12 @@ struct DailyQuizApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationContainer {
-                StartQuizView(viewModel: StartQuizViewModel(router: router))
+                StartQuizView(
+                    viewModel: StartQuizViewModel(
+                        httpClient: HTTPClient(),
+                        router: router
+                    )
+                )
             }
             .environmentObject(router)
         }
