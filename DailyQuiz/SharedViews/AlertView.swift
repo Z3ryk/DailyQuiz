@@ -1,5 +1,5 @@
 //
-//  TimerExpiredView.swift
+//  AlertView.swift
 //  DailyQuiz
 //
 //  Created by Z3ryk on 02.08.2025.
@@ -7,11 +7,14 @@
 
 import SwiftUI
 
-struct TimerExpiredView: View {
+struct AlertView: View {
     // MARK: - Properties
-    
-    let onRestart: () -> Void
-    
+
+    let title: String
+    let subtitle: String
+    let buttonTitle: String
+    let action: () -> Void
+
     // MARK: - Views
     
     var body: some View {
@@ -19,26 +22,19 @@ struct TimerExpiredView: View {
             Color.black.opacity(0.5)
                 .ignoresSafeArea()
 
-            VStack(spacing: 24) {
-                Text("Время вышло!")
+            VStack(spacing: 12) {
+                Text(title)
                     .font(.system(size: 28, weight: .bold))
                     .foregroundStyle(.black)
                     .multilineTextAlignment(.center)
 
-                VStack(spacing: 8) {
-                    Text("Вы не успели завершить викторину.")
+                    Text(subtitle)
                         .font(.system(size: 16, weight: .regular))
                         .foregroundStyle(.black)
                         .multilineTextAlignment(.center)
-                    
-                    Text("Попробуйте еще раз!")
-                        .font(.system(size: 16, weight: .regular))
-                        .foregroundStyle(.black)
-                        .multilineTextAlignment(.center)
-                }
                 
-                Button(action: onRestart) {
-                    Text("НАЧАТЬ ЗАНОВО")
+                Button(action: action) {
+                    Text(buttonTitle)
                         .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
@@ -46,17 +42,25 @@ struct TimerExpiredView: View {
                         .background(.purpleMain)
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                 }
+                .padding(.top, 28)
+                .padding(.horizontal, 16)
             }
-            .padding(32)
+            .padding(.vertical, 32)
             .background(.white)
             .clipShape(RoundedRectangle(cornerRadius: 46))
-            .shadow(color: .black.opacity(0.1), radius: 20, x: 0, y: 10)
             .padding(.horizontal, 24)
         }
     }
 }
 
 #Preview {
-    TimerExpiredView { }
+    AlertView(
+        title: "Время вышло!",
+        subtitle: "Вы не успели завершить викторину.\nПопробуйте еще раз!",
+        buttonTitle: "НАЧАТЬ ЗАНОВО",
+        action: { }
+    )
+    .background(.purpleMain)
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
 }
 

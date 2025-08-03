@@ -130,9 +130,12 @@ struct QuizView: View {
         .navigationBarBackButtonHidden(true)
         .overlay {
             if viewModel.state.showTimerExpiredOverlay {
-                TimerExpiredView {
-                    viewModel.navigateToStart()
-                }
+                AlertView(
+                    title: "Время вышло!",
+                    subtitle: "Вы не успели завершить викторину.\nПопробуйте еще раз!",
+                    buttonTitle: "НАЧАТЬ ЗАНОВО",
+                    action: viewModel.navigateToStart
+                )
             }
         }
         .toolbar {
