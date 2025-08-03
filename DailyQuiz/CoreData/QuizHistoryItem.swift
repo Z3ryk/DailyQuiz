@@ -13,24 +13,6 @@ struct QuizHistoryItem: Identifiable {
     let score: Int
     let totalQuestions: Int
     let completedAt: Date
-
-    private let dateFormatter = DateFormatter()
-
-    var starsCount: Int {
-        let percentage = Double(score) / Double(totalQuestions)
-        return Int(percentage * 5)
-    }
-    
-    var formattedDate: String {
-        dateFormatter.dateFormat = "d MMMM"
-        dateFormatter.locale = Locale(identifier: "ru_RU")
-        return dateFormatter.string(from: completedAt).lowercased()
-    }
-    
-    var formattedTime: String {
-        dateFormatter.dateFormat = "HH:mm"
-        return dateFormatter.string(from: completedAt)
-    }
 }
 
 extension QuizHistoryItem {
